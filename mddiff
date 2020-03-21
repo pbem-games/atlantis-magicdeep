@@ -1,0 +1,494 @@
+? mddiff
+Index: ARMGen.cpp
+===================================================================
+RCS file: /cvsroot/mdeep/ARMGen.cpp,v
+retrieving revision 1.23
+diff -r1.23 ARMGen.cpp
+0a1,5
+> //---------------------------------------------------------------------------
+> 
+> //#include <vcl.h>
+> #pragma hdrstop
+> 
+6c11,14
+< #include <math>
+---
+> #include <math.h>
+> //#include <vector.h>
+> //#include <mfc/afxtempl.h>
+> #pragma package(smart_init)
+52c60
+< ARMGenerator::ARMGenerator(int xSize, int ySize)
+---
+> __fastcall ARMGenerator::ARMGenerator(int xSize, int ySize)
+4243,4249d4250
+< 	m_pMap[x][y].iCitySize = 0;
+< 	int k;
+< 	for(k=0; k<NUMMAN; k++)
+< 	{
+< 		m_pMap[x][y].aPop[k] = 0;
+< 	}
+< 
+4251a4253,4258
+> 		m_pMap[x][y].iCitySize = 0;
+> 		int k;
+> 		for(k=0; k<NUMMAN; k++)
+> 		{
+> 			m_pMap[x][y].aPop[k] = 0;
+> 		}
+4254d4260
+< 	
+5450c5456
+< ARMProvinceInfoTable::ARMProvinceInfoTable()
+---
+> __fastcall ARMProvinceInfoTable::ARMProvinceInfoTable()
+Index: ARMGen.h
+===================================================================
+RCS file: /cvsroot/mdeep/ARMGen.h,v
+retrieving revision 1.15
+diff -r1.15 ARMGen.h
+8a9
+> //#include <Classes.hpp>
+112c113
+< 	ARMProvinceInfoTable();
+---
+> 	__fastcall ARMProvinceInfoTable();
+203c204
+< 	ARMGenerator(int xSize=128, int ySize=128);
+---
+> 	__fastcall ARMGenerator(int xSize=128, int ySize=128);
+Index: CFractalMap.cpp
+===================================================================
+RCS file: /cvsroot/mdeep/CFractalMap.cpp,v
+retrieving revision 1.8
+diff -r1.8 CFractalMap.cpp
+0a1,5
+> //---------------------------------------------------------------------------
+> 
+> #include <vcl.h>
+> #pragma hdrstop
+> 
+3c8,10
+< #include <math>
+---
+> #include <Math.h>
+> #include <Math.hpp>
+> #pragma package(smart_init)
+28c35
+< TMapPoint::TMapPoint()
+---
+> __fastcall TMapPoint::TMapPoint()
+34c41
+< TMapPoint::TMapPoint(int xx, int yy)
+---
+> __fastcall TMapPoint::TMapPoint(int xx, int yy)
+47c54
+< CFractalMap::CFractalMap()
+---
+> __fastcall CFractalMap::CFractalMap()
+604c611
+< 	depth = log(dim)/log(2);
+---
+> 	depth = LogN(2, dim);
+751c758
+< 	depth = log(dim)/log(2);
+---
+> 	depth = LogN(2, dim);
+Index: CFractalMap.h
+===================================================================
+RCS file: /cvsroot/mdeep/CFractalMap.h,v
+retrieving revision 1.7
+diff -r1.7 CFractalMap.h
+0a1,2
+> //---------------------------------------------------------------------------
+> 
+3a6,7
+> //#include <Classes.hpp>
+> //---------------------------------------------------------------------------
+24,25c28,29
+< 	TMapPoint();
+< 	TMapPoint(int xx, int yy);
+---
+> 	__fastcall TMapPoint();
+> 	__fastcall TMapPoint(int xx, int yy);
+47c51
+< 	CFractalMap();
+---
+> 	__fastcall CFractalMap();
+52c56
+< 	TMapPoint GetNeighbour(int x, int y, int dir, int allowed, TFRegion **pNewMap=0, int iNewWIDTH=0, int iNewHEIGHT=0, int onlyExists=1);
+---
+> 	TMapPoint GetNeighbour(int x, int y, int dir, int allowed, TFRegion **pNewMap=NULL, int iNewWIDTH=0, int iNewHEIGHT=0, int onlyExists=1);
+54c58
+< 	TMapPoint GetOppositeNeighbour(int x, int y, int dir, int allowed, TFRegion **pNewMap=0, int iNewWIDTH=0, int iNewHEIGHT=0);
+---
+> 	TMapPoint GetOppositeNeighbour(int x, int y, int dir, int allowed, TFRegion **pNewMap=NULL, int iNewWIDTH=0, int iNewHEIGHT=0);
+Index: NameGen.cpp
+===================================================================
+RCS file: /cvsroot/mdeep/NameGen.cpp,v
+retrieving revision 1.8
+diff -r1.8 NameGen.cpp
+0a1,5
+> //---------------------------------------------------------------------------
+> 
+> 
+> #pragma hdrstop
+> 
+3a9,12
+> //#include <system.hpp>
+> //#include <Classes.hpp>
+> 
+> #pragma package(smart_init)
+Index: NameGen.h
+===================================================================
+RCS file: /cvsroot/mdeep/NameGen.h,v
+retrieving revision 1.3
+diff -r1.3 NameGen.h
+0a1,2
+> //---------------------------------------------------------------------------
+> 
+3a6,7
+> //#include <system.hpp>
+> //#include <Classes.hpp>
+5a10,11
+> 
+> //---------------------------------------------------------------------------
+Index: army.cpp
+===================================================================
+RCS file: /cvsroot/mdeep/army.cpp,v
+retrieving revision 1.23
+diff -r1.23 army.cpp
+114c114
+< 		if(!attacks) attacks = 1;
+---
+> //		if(!attacks) attacks = 1;
+649c649
+< 					if(ItemDefs[ it->type ].type & IT_MAN)
+---
+> 					if(ItemDefs[ it->type ].type & IT_MAN || ItemDefs[it->type].type & IT_MONSTER)
+Index: astring.cpp
+===================================================================
+RCS file: /cvsroot/mdeep/astring.cpp,v
+retrieving revision 1.3
+diff -r1.3 astring.cpp
+351,362d350
+< 
+< AString *AString::ReplaceSpaces()
+< {
+< 	char *temp1 = str;
+< 	while (*temp1)
+< 	{
+< 		char t1 = *temp1;
+< 		if (t1 == ' ') temp1[0] = '_';
+< 		temp1++;
+< 	}
+< 	return this;
+< }
+Index: astring.h
+===================================================================
+RCS file: /cvsroot/mdeep/astring.h,v
+retrieving revision 1.2
+diff -r1.2 astring.h
+64d63
+< 	AString *ReplaceSpaces();
+Index: battle.cpp
+===================================================================
+RCS file: /cvsroot/mdeep/battle.cpp,v
+retrieving revision 1.20
+diff -r1.20 battle.cpp
+59,60c59,60
+<         CastEffects(att, def);
+<         CastEffects(def, att);        
+---
+> //        CastEffects(att, def);        // Не получается сделать эффекты вначале раунда
+> //        CastEffects(def, att);
+278a279,297
+> 	int aste = att->GetStealth();
+> 	int dobs = 0;
+> 	forlist(&region->objects)
+> 	{
+> 		Object *o = (Object *) elem;
+> 		forlist(&o->units)
+> 		{
+> 			Unit *u = (Unit *) elem;
+> 			if (u->faction == tar->faction || /* defend EITHER if from same faction */
+> 			   (u->guard != GUARD_AVOID &&
+> 				u->GetAttitude(region,tar) == A_ALLY && /* or from mutually ally factions */
+> 				tar->GetAttitude(region,u) == A_ALLY))
+> 			{
+> 				if(u->GetObservation() > dobs)
+> 					dobs = u->GetObservation();
+> 			}
+> 		}
+> 	}
+> 
+290c309,310
+< 	while (!armies[0]->Broken() && !armies[1]->Broken() && round < 101) {
+---
+> 	while (!armies[0]->Broken() && !armies[1]->Broken() && ((round < 101 && !ass) || round < aste-dobs))
+> 	{
+334c354,361
+< 			AddLine(*(armies[1]->leader->name) + " is destroyed!");
+---
+> 			if(ass)
+> 			{
+> 				AddLine(*(armies[1]->leader->name) + " is assassinated!");
+> 			}
+> 			else
+> 			{
+> 				AddLine(*(armies[1]->leader->name) + " is destroyed!");
+> 			}
+344c371,378
+< 	AddLine("The battle ends indecisively.");
+---
+> 	if(ass)
+> 	{
+> 		AddLine("The assassin escaped, frightened by alarm.");
+> 	}
+> 	else
+> 	{
+> 		AddLine("The battle ends indecisively.");
+> 	}
+353a388,393
+> 
+> 	if(ass)
+> 	{
+> 		att->nomove = 0;
+> 	}
+> 
+489,490c529,530
+< 				    u->GetAttitude(r,t) == A_ALLY && /* or from mutually ally factions */
+< 				    t->GetAttitude(r,u) == A_ALLY))
+---
+> 					u->GetAttitude(r,t) == A_ALLY && /* or from mutually ally factions */
+> 					t->GetAttitude(r,u) == A_ALLY))
+Index: extra.cpp
+===================================================================
+RCS file: /cvsroot/mdeep/extra.cpp,v
+retrieving revision 1.10
+diff -r1.10 extra.cpp
+212c212
+< 	ModifyItemBasePrice(I_BOOTS, 1000000);
+---
+> 	//ModifyItemBasePrice(I_BOOTS, 1000000);
+Index: gamedata.cpp
+===================================================================
+RCS file: /cvsroot/mdeep/gamedata.cpp,v
+retrieving revision 1.49
+diff -r1.49 gamedata.cpp
+402c402
+<    S_WEAPONCRAFT,3,2,1, {{I_YEW,1},{I_MITHRIL,1},{-1,0},{-1,0}},
+---
+>    S_WEAPONCRAFT,3,2,1, {{I_YEW,2},{-1,0},{-1,0},{-1,0}},
+1651c1651
+<    S_WEAPONSMITH,1,1,1, {{I_WOOD,1},{-1,0},{-1,0},{-1,0}},
+---
+>    S_WEAPONSMITH,1,1,1, {{I_WOOD,1},{I_MITHRIL,1},{-1,0},{-1,0}},
+1653c1653
+<    1, IT_NORMAL | IT_WEAPON, 80,1,WEAPON_SHORTBOW, 0,
+---
+>    1, IT_ADVANCED | IT_WEAPON, 500,1,WEAPON_SHORTBOW, 0,
+1661c1661
+<    2,IT_ADVANCED | IT_WEAPON, 500,1,WEAPON_ARBALEST, 0,
+---
+>    2,IT_ADVANCED | IT_WEAPON, 600,1,WEAPON_ARBALEST, 0,
+2455c2455
+<    PIERCING, ATTACK_RANGED, WeaponType::NUM_ATTACKS_SKILL,
+---
+>    PIERCING, ATTACK_RANGED, WeaponType::NUM_ATTACKS_HALF_SKILL,
+2475,2476c2475,2476
+<    PIERCING, ATTACK_RANGED, 1,
+<    3, 0, 0},
+---
+>    PIERCING, ATTACK_RANGED, 2,
+>    0, 0, 0},
+2487,2491d2486
+<   // WEAPON_LONGBOW
+<   {WeaponType::NEEDSKILL | WeaponType::RANGED | WeaponType::NOATTACKERSKILL,
+<    S_LONGBOW, -1,
+<    PIERCING, ATTACK_RANGED, 1,
+<    0, 0, 0},
+2495c2490
+<    PIERCING, ATTACK_RANGED, WeaponType::NUM_ATTACKS_HALF_SKILL,
+---
+>    PIERCING, ATTACK_RANGED, 2, //WeaponType::NUM_ATTACKS_HALF_SKILL,
+2496a2492,2496
+>   // WEAPON_LONGBOW
+>   {WeaponType::NEEDSKILL | WeaponType::RANGED | WeaponType::NOATTACKERSKILL,
+>    S_LONGBOW, -1,
+>    PIERCING, ATTACK_RANGED, 1,
+>    3, 0, 0},
+Index: gamedata.h
+===================================================================
+RCS file: /cvsroot/mdeep/gamedata.h,v
+retrieving revision 1.19
+diff -r1.19 gamedata.h
+421d420
+<   WEAPON_LONGBOW,
+422a422
+>   WEAPON_LONGBOW,
+Index: monthorders.cpp
+===================================================================
+RCS file: /cvsroot/mdeep/monthorders.cpp,v
+retrieving revision 1.18
+diff -r1.18 monthorders.cpp
+1006a1007,1011
+>         if (o->item == I_SHORTBOW) { // cheat in test game
+>                 delete u->monthorders;
+> 		u->monthorders = 0;
+>                 return;
+>         }
+Index: rules.cpp
+===================================================================
+RCS file: /cvsroot/mdeep/rules.cpp,v
+retrieving revision 1.27
+diff -r1.27 rules.cpp
+175c175
+< 	0,	// GM_REPORT
+---
+> 	1,	// GM_REPORT
+Index: runorders.cpp
+===================================================================
+RCS file: /cvsroot/mdeep/runorders.cpp,v
+retrieving revision 1.19
+diff -r1.19 runorders.cpp
+417,422c417,422
+< 	if (tar->type == U_GUARD || tar->type == U_WMON ||
+< 			tar->type == U_GUARDMAGE) {
+< 		u->Error("ASSASSINATE: Can only assassinate other player's "
+< 				"units.");
+< 		return;
+< 	}
+---
+> //	if (tar->type == U_GUARD || tar->type == U_WMON ||
+> //			tar->type == U_GUARDMAGE) {
+> //		u->Error("ASSASSINATE: Can only assassinate other player's "
+> //				"units.");
+> //		return;
+> //	}
+490,495c490,495
+< 	if (tar->type == U_GUARD || tar->type == U_WMON ||
+< 			tar->type == U_GUARDMAGE) {
+< 		u->Error("STEAL: Can only steal from other player's "
+< 				"units.");
+< 		return;
+< 	}
+---
+> //	if (tar->type == U_GUARD || tar->type == U_WMON ||
+> //			tar->type == U_GUARDMAGE) {
+> //		u->Error("STEAL: Can only steal from other player's "
+> //				"units.");
+> //		return;
+> //	}
+Index: specials.cpp
+===================================================================
+RCS file: /cvsroot/mdeep/specials.cpp,v
+retrieving revision 1.10
+diff -r1.10 specials.cpp
+207c207
+<                                 Soldier * s = a->GetAttacker(i, behind);
+---
+>                                 Soldier * s = a->soldiers[i]; //a->GetAttacker(i, behind);
+Index: support.cpp
+===================================================================
+RCS file: /cvsroot/mdeep/support.cpp,v
+retrieving revision 1.14
+diff -r1.14 support.cpp
+0a1,4
+> //---------------------------------------------------------------------------
+> 
+> #pragma hdrstop
+> 
+5a10
+> #pragma package(smart_init)
+81,84c86,87
+< 
+< 	for(y = 0; y < pARM->HEIGHT; y++)
+< 
+< 	{
+---
+> 	for(y = 0; y < pARM->HEIGHT; y++)
+> 	{
+133,134c136
+< 
+< 		for(x = 0; x < regions.pRegionArrays[level]->x; x++)
+---
+> 		for(x = 0; x < regions.pRegionArrays[level]->x; x++)
+140,147c142,145
+< 
+< 				if(reg->town || (reg->type != R_OCEAN && getrandom(128)==1))
+< 
+< 				{
+< 
+< //Firstly, add fortresses
+< 
+< 					if(reg->Population() > 4000 && GetChance(Globals->ARM_FORTRESS_PROBABILITY))
+---
+> 				if(reg->town || (reg->type != R_OCEAN && getrandom(128)==1))
+> 				{
+> //Firstly, add fortresses
+> 					if(reg->Population() > 4000 && GetChance(Globals->ARM_FORTRESS_PROBABILITY))
+239,251c237,240
+< 
+< 					ARegion *nearestCity;
+< 
+< 					int num = 0;
+< 					do
+< 					{
+< 						nearestCity = regions.ARMGetNearestSettlement(reg, num++);
+< 						regions.ARMBuildAncientRoad(reg, nearestCity);
+< 					}
+< 					while(nearestCity != NULL && getrandom(3)!=1);
+< 				}//And ships...
+< 
+< 				if(reg->IsCoastal())
+---
+> 					ARegion *nearestCity;
+> 					int num = 0;
+> 					do					{						nearestCity = regions.ARMGetNearestSettlement(reg, num++);						regions.ARMBuildAncientRoad(reg, nearestCity);					}					while(nearestCity != NULL && getrandom(3)!=1);				}//And ships...
+> 				if(reg->IsCoastal())
+291a281
+> 	}
+293,302c283,286
+< 	}
+< 
+< 
+< //Roads must be massively destroed...
+< 
+< 	for(y = 0; y < regions.pRegionArrays[level]->y; y++)
+< 
+< 	{
+< 
+< 		for(x = 0; x < regions.pRegionArrays[level]->x; x++)
+---
+> //Roads must be massively destroed...
+> 	for(y = 0; y < regions.pRegionArrays[level]->y; y++)
+> 	{
+> 		for(x = 0; x < regions.pRegionArrays[level]->x; x++)
+308,311c292,293
+< 
+< 				forlist (&(reg->objects))
+< 
+< 				{
+---
+> 				forlist (&(reg->objects))
+> 				{
+321,326c303,305
+< 
+< 		}
+< 
+< 	}
+< 
+< }
+---
+> 		}
+> 	}
+> }
+Index: support.h
+===================================================================
+RCS file: /cvsroot/mdeep/support.h,v
+retrieving revision 1.3
+diff -r1.3 support.h
+0a1,2
+> //---------------------------------------------------------------------------
+> 
