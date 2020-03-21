@@ -25,10 +25,17 @@ struct TMapRect
   bool operator !=(const TMapRect& rc) const
   {  return !(rc==*this); }
 
-  __property long Left    = { read=left,   write=left   };
-  __property long Top     = { read=top,    write=top };
-  __property long Right   = { read=right,  write=right  };
-  __property long Bottom  = { read=bottom, write=bottom };
+  long Left() const { return left; }
+  void Left(long l) { left = l; }
+
+  long Top() const { return top; }
+  void Top(long t) { top = t; }
+
+  long Right() const { return right; }
+  void Right(long r) { right = r; }
+
+  long Bottom() const { return bottom; }
+  void Bottom(long b) { bottom = b; }
 };
 
 
@@ -110,7 +117,7 @@ private:
 	int size[HASH_SIZE];
 	void DeleteBorder(int iID1, int iID2);
 public:
-	__fastcall ARMProvinceInfoTable();
+	ARMProvinceInfoTable();
 	~ARMProvinceInfoTable();
 	TARMProvince * Find(int iID);
 	void Delete(TARMProvince *);
@@ -201,7 +208,7 @@ public:
 	void Clear();
 	void BalanceMap(float fNeedWater, float fNeedMontanas);
 
-	__fastcall ARMGenerator(int xSize=128, int ySize=128);
+	ARMGenerator(int xSize=128, int ySize=128);
 	~ARMGenerator();
 	void FormateSeasNames();
 	void FormateSeasNamesOneStep(int h);

@@ -4,7 +4,7 @@
 #include "object.h"
 #include "aregion.h"
 #include "npc.h"
-#include <conio>
+//#include <conio>
 
 /*
 	ManDefs - расы

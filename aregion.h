@@ -32,6 +32,7 @@
 
 class ARegion;
 class ARegionList;
+class ARegionArray;
 
 #include "gamedefs.h"
 #include "gameio.h"

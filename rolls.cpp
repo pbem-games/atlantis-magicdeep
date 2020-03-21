@@ -25,7 +25,7 @@
 
 #include "gameio.h"
 #include "rolls.h"
-#include <math>
+#include <cmath>
 
 int dice(int c, int d, int a){
    int sum = 0;

@@ -628,22 +628,3 @@ void Game::AdjustCityMon( ARegion *pReg, Unit *u )
         }
 }
 
-
-int ARegion::GetGuardLevel()
-{
-        if( type == R_NEXUS )
-            return TOWN_CITY + 1;
-        if (Globals->GUARDS_LEVEL_BY_TAX) {
-             if (money < 8000) return TOWN_VILLAGE;
-             if (money < 14000) return TOWN_TOWN;
-             if (money < 21000) return TOWN_CITY;
-             return TOWN_CITY + 1;
-        }
-        else {
-            if (town)
-                return town->TownType();
-            return 0;
-        }
-}
-
-

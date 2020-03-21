@@ -25,8 +25,8 @@ class TMapPoint
 {
 public:
 	int x,y;
-	__fastcall TMapPoint();
-	__fastcall TMapPoint(int xx, int yy);
+	TMapPoint();
+	TMapPoint(int xx, int yy);
 	~TMapPoint();
 };
 
@@ -48,14 +48,14 @@ public:
 	int WIDTH;
 	int HEIGHT;
 	TFRegion **m_pMap;
-	__fastcall CFractalMap();
+	CFractalMap();
 	~CFractalMap();
 	void CreateWorld(int Width, int Height, int WaterPercent, int ContinentsCount, int Smoothness, int BarrierHeight=-1);
 	int GetHeight(int iX, int iY);
 	void CreateSphere(int Width, int Height, int WaterPercent, int ContinentsCount, int Smoothness);
-	TMapPoint GetNeighbour(int x, int y, int dir, int allowed, TFRegion **pNewMap=NULL, int iNewWIDTH=0, int iNewHEIGHT=0, int onlyExists=1);
+	TMapPoint GetNeighbour(int x, int y, int dir, int allowed, TFRegion **pNewMap=nullptr, int iNewWIDTH=0, int iNewHEIGHT=0, int onlyExists=1);
 	bool IsAllowed(int x, int y);
-	TMapPoint GetOppositeNeighbour(int x, int y, int dir, int allowed, TFRegion **pNewMap=NULL, int iNewWIDTH=0, int iNewHEIGHT=0);
+	TMapPoint GetOppositeNeighbour(int x, int y, int dir, int allowed, TFRegion **pNewMap=nullptr, int iNewWIDTH=0, int iNewHEIGHT=0);
 	int GetContiID(int iX, int iY);
 };
 //---------------------------------------------------------------------------
