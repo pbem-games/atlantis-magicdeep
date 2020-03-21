@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------------
 
 //#include <vcl.h>
-#pragma hdrstop
+//#pragma hdrstop
 
 #include "ARMGen.h"
 #include "CFractalMap.h"
@@ -11,7 +11,7 @@
 #include <math.h>
 //#include <vector.h>
 //#include <mfc/afxtempl.h>
-#pragma package(smart_init)
+//#pragma package(smart_init)
 //---------------------------------------------------------------------------
 //const WIDTH = 128;
 //const HEIGHT = 128;
@@ -57,7 +57,7 @@ int aTemperature[rtCOUNT][2] =
 	{0,1},//rtTUNDRA,
 	{0,3}};//rtWASTELANDS
 
-__fastcall ARMGenerator::ARMGenerator(int xSize, int ySize)
+ARMGenerator::ARMGenerator(int xSize, int ySize)
 {
 //    Randomize();
 //	RandSeed = Time();
@@ -1446,16 +1446,17 @@ void ARMGenerator::FormateSeasNames()
 		FormateSeasNamesOneStep(h);
 	}
 
-	int i,j;
+	int i;
+	//int j;
 	m_pProvinceInfo = new ARMProvinceInfoTable();
 
 	m_pSeasLocation = (TMapRect *)calloc(maxID, sizeof(TMapRect));
 	for(i=0; i<maxID; i++)
 	{
-		m_pSeasLocation[i].Left = WIDTH;
-		m_pSeasLocation[i].Top = HEIGHT;
-		m_pSeasLocation[i].Right = 0;
-		m_pSeasLocation[i].Bottom = 0;
+		m_pSeasLocation[i].Left(WIDTH);
+		m_pSeasLocation[i].Top(HEIGHT);
+		m_pSeasLocation[i].Right(0);
+		m_pSeasLocation[i].Bottom(0);
 	}
 
 	for(y=0; y<HEIGHT; y++)
@@ -1492,14 +1493,14 @@ void ARMGenerator::FormateSeasNames()
 					if(m_pProvinceInfo->GetArea(m_pMap[x][y].nameID) == 0)
 						m_pProvinceInfo->SetArea(m_pMap[x][y].nameID, CountSeaArea(x,y));
 
-					if(m_pSeasLocation[m_pMap[x][y].nameID].Left > x)
-						m_pSeasLocation[m_pMap[x][y].nameID].Left = x;
-					if(m_pSeasLocation[m_pMap[x][y].nameID].Top > y)
-						m_pSeasLocation[m_pMap[x][y].nameID].Top = y;
-					if(m_pSeasLocation[m_pMap[x][y].nameID].Right < x)
-						m_pSeasLocation[m_pMap[x][y].nameID].Right = x;
-					if(m_pSeasLocation[m_pMap[x][y].nameID].Bottom < y)
-						m_pSeasLocation[m_pMap[x][y].nameID].Bottom = y;
+					if(m_pSeasLocation[m_pMap[x][y].nameID].Left() > x)
+						m_pSeasLocation[m_pMap[x][y].nameID].Left(x);
+					if(m_pSeasLocation[m_pMap[x][y].nameID].Top() > y)
+						m_pSeasLocation[m_pMap[x][y].nameID].Top(y);
+					if(m_pSeasLocation[m_pMap[x][y].nameID].Right() < x)
+						m_pSeasLocation[m_pMap[x][y].nameID].Right(x);
+					if(m_pSeasLocation[m_pMap[x][y].nameID].Bottom() < y)
+						m_pSeasLocation[m_pMap[x][y].nameID].Bottom(y);
 				}
 			}
 		}
@@ -2110,9 +2111,9 @@ AString ARMGenerator::GetSeaName(int nameID)
 
 	if(nameID%3 == 0)
 	{
-		if(m_pSeasLocation[nameID].Bottom < HEIGHT/6)
+		if(m_pSeasLocation[nameID].Bottom() < HEIGHT/6)
 			sResult = sResult + " Northern";
-		if(m_pSeasLocation[nameID].Top > HEIGHT*5/6)
+		if(m_pSeasLocation[nameID].Top() > HEIGHT*5/6)
 			sResult = sResult + " Southern";
 	}
 
@@ -2613,6 +2614,8 @@ int ARMGenerator::GrowElement(RegionType reg, int x, int y, const int maxWeight)
 									}
 								}
 							}
+						default:
+							std::cerr << "Unknown" << std::endl;
 					}
 				  }	
 				}
@@ -3776,8 +3779,8 @@ void ARMGenerator::MergeProvinces()
 			}
 		}
 	}
-	TARMProvince *pProvince;
-	pProvince = m_pProvinceInfo->Find(1743);
+	//TARMProvince *pProvince;
+	//pProvince = m_pProvinceInfo->Find(1743);
 }
 
 AString ARMGenerator::GetForestName(AString sBase, int nameID)
@@ -4222,6 +4225,8 @@ int ARMGenerator::GetStandartRType(RegionType rType, bool bAdvancedMap)
 				return R_TUNDRA;
 		case rtWASTELANDS:
 				return R_CERAN_WASTELAND;
+		default:
+				return R_OCEAN;
 	}
 
 	return R_OCEAN;
@@ -4819,6 +4824,7 @@ void ARMGenerator::CalculateTemperature()
 						}
 						break;
 					case ctETERNALTWILIGHT:
+					default:
 						break;
 				}
 
@@ -4932,13 +4938,13 @@ int ARMGenerator::AddElementAtRandom(int tRegion, int mass)
 	}
 	while(i % 2 != j % 2);
 
-	if(CanBeElement(i, j, tRegion))
+	if(CanBeElement(i, j, RegionType(tRegion)))
 	{
-		m_pMap[i][j].type = tRegion;
+		m_pMap[i][j].type = RegionType(tRegion);
 		m_pMap[i][j].nameID = maxID++;
 
 		int newArea;
-		newArea = GrowElement(tRegion, i, j, mass);
+		newArea = GrowElement(RegionType(tRegion), i, j, mass);
 		if(newArea > 1)
 		{
 			return newArea;
@@ -5184,9 +5190,8 @@ AString ARMGenerator::GetVolcanoName(AString sBase, int nameID)
 	sResult = sBase;
 	sNum = "";//" (S=" + IntToStr(m_pSeasInfo[nameID][maxID]) + ")";
 
-	int area;
-
-	area = m_pProvinceInfo->GetArea(nameID);
+	//int area;
+	//area = m_pProvinceInfo->GetArea(nameID);
 
 
 	if(nameID%2 == 1)
@@ -5453,7 +5458,7 @@ ARMProvinceInfoTable::~ARMProvinceInfoTable()
 	}
 }
 
-__fastcall ARMProvinceInfoTable::ARMProvinceInfoTable()
+ARMProvinceInfoTable::ARMProvinceInfoTable()
 {
 	for(int i=0; i<HASH_SIZE; i++)
 	{

@@ -1,13 +1,13 @@
 //---------------------------------------------------------------------------
 
-#include <vcl.h>
-#pragma hdrstop
+//#include <vcl.h>
+//#pragma hdrstop
 
 #include "CFractalMap.h"
 #include "gameio.h"
-#include <Math.h>
-#include <Math.hpp>
-#pragma package(smart_init)
+#include <math.h>
+//#include <Math.hpp>
+//#pragma package(smart_init)
 //---------------------------------------------------------------------------
 /*
 const TMapPoint aDir1[3] = {TMapPoint(-1,0),
@@ -17,6 +17,11 @@ const TMapPoint aDir2[3] = {TMapPoint(-1,0),
 				   TMapPoint(+1,0),
 				   TMapPoint(0,+1)};
 */
+int Log2(int val)
+{
+	return log(val)/log(2);
+}
+
 const TMapPoint aCounterDir1[3] = {TMapPoint(+3,-1),
 							   TMapPoint(-3,-1),
 							   TMapPoint(0,+2)};
@@ -32,13 +37,13 @@ const TMapPoint aDir2[3] = {TMapPoint(-1,0),
 				   TMapPoint(+1,0)};
 
 //---------------------------------------------------------------------------
-__fastcall TMapPoint::TMapPoint()
+TMapPoint::TMapPoint()
 {
 	x = 0;
 	y = 0;
 }
 //---------------------------------------------------------------------------
-__fastcall TMapPoint::TMapPoint(int xx, int yy)
+TMapPoint::TMapPoint(int xx, int yy)
 {
 	x = xx;
 	y = yy;
@@ -51,7 +56,7 @@ TMapPoint::~TMapPoint()
 }
 
 //---------------------------------------------------------------------------
-__fastcall CFractalMap::CFractalMap()
+CFractalMap::CFractalMap()
 {
 	m_pMap = NULL;
 	WIDTH = 0;
@@ -608,7 +613,7 @@ void CFractalMap::CreateWorld(int Width, int Height, int WaterPercent, int Conti
 	}
 
 	int depth;
-	depth = LogN(2, dim);
+	depth = Log2(dim);
 
 	if(pow(2,depth) < dim)
 	{
@@ -755,7 +760,7 @@ void CFractalMap::CreateSphere(int Width, int Height, int WaterPercent, int Cont
 	}
 
 	int depth;
-	depth = LogN(2, dim);
+	depth = Log2(dim);
 
     if(depth < m_iDepth)
     {

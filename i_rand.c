@@ -40,7 +40,7 @@ MODIFIED:
 
 #ifndef STANDARD
 #include "i_std.h"
-#endif  */
+#endif
 #ifndef RAND
 #include "i_rand.h"
 #endif
